@@ -1,0 +1,20 @@
+{
+    "name": "quyenbui/api-exploder",
+    "description": "Api exploder project",
+    "require": {
+        "silex/silex": "^2.0",
+        "guzzlehttp/guzzle": "^6.2",
+        "phpfastcache/phpfastcache": "^5.0"
+    },
+    "authors": [
+        {
+            "name": "quyenbui",
+            "email": "quyen@go1.com.au"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "ApiExploder\\": "src"
+        }
+    }
+}
