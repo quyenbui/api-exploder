@@ -2,7 +2,7 @@
 
 namespace ApiExploder;
 
-use ApiExploder\Forward\Controller;
+use ApiExploder\Connector\Controller;
 use GuzzleHttp\Client;
 use phpFastCache\CacheManager;
 use Pimple\Container;
