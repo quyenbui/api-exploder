@@ -15,16 +15,17 @@ class ControllerProvider implements ControllerProviderInterface
     {
         $services = $app['service_manager.ctrl']->getResourceDefinitions();
         $controllers = $app['controllers_factory'];
-
         foreach ($services as $serviceName => $service) {
             foreach ($service as $resourceName => $resource) {
                 foreach (array_keys($resource['endpoints']) as $endpoint) {
                     list($path, $method) = explode(':', $endpoint);
                     $method = strtolower($method);
-                    $methods = ['get', 'post', 'put', 'patch', 'options', 'delete'];
+                    $methods = ['get', 'post', 'patch', 'delete', 'options'];
                     if (in_array($method, $methods)) {
-                        $controllers->$method($resourceName . '/' . $path, 'forward.ctrl:forward')
-                            ->bind(sprintf('%s->%s->%s', $serviceName, $resourceName, $path));
+                        foreach (['options', $method] as $_method) {
+                            $controllers->{$_method}($resourceName . '/' . $path, 'forward.ctrl:forward')
+                                ->bind(sprintf('%s->%s->%s:%s', $serviceName, $resourceName, $path, $_method));
+                        }
                     } else {
                         throw new Exception(sprintf('The method %s of endpoint %s is not supported.', $method, $path));
                     }

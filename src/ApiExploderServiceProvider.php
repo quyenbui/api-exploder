@@ -15,19 +15,19 @@ class ApiExploderServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $pimple)
     {
-        $pimple['service_manager.ctrl'] = function () use ($pimple) {
+        $pimple['service_manager.ctrl'] = function ($pimple) {
             return new ServiceManagerController($pimple);
         };
 
-        $pimple['forward.ctrl'] = function () use ($pimple) {
+        $pimple['forward.ctrl'] = function ($pimple) {
             return new Controller($pimple);
         };
 
-        $pimple['guzzle'] = function () use ($pimple) {
+        $pimple['guzzle'] = function () {
             return new Client();
         };
 
-        $pimple['app.cache'] = function () use ($pimple) {
+        $pimple['app.cache'] = function ($pimple) {
             return CacheManager::getInstance($pimple['cache.options']['driver'], $pimple['cache.options']);
         };
     }
