@@ -23,8 +23,9 @@ class ControllerProvider implements ControllerProviderInterface
                     $methods = ['get', 'post', 'patch', 'delete', 'options'];
                     if (in_array($method, $methods)) {
                         foreach (['options', $method] as $_method) {
-                            $controllers->{$_method}($resourceName . '/' . $path, 'forward.ctrl:forward')
-                                ->bind(sprintf('%s->%s->%s:%s', $serviceName, $resourceName, $path, $_method));
+                            call_user_func([$controllers, $_method], $resourceName . '/' . $path, 'forward.ctrl:forward')
+                                ->bind(sprintf('%s->%s->%s:%s', $serviceName, $resourceName, $path, $_method))
+                                ->before('forward.ctrl:ValidateRequest');
                         }
                     } else {
                         throw new Exception(sprintf('The method %s of endpoint %s is not supported.', $method, $path));

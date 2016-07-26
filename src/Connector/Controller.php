@@ -6,6 +6,7 @@ use ApiExploder\App;
 use ApiExploder\ServiceManagerController;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
@@ -49,6 +50,29 @@ class Controller
         }
 
         throw new MethodNotAllowedHttpException([], sprintf('Your request method %s is not allowed', $request->getMethod()));
+    }
+
+    public function ValidateRequest(Request $request)
+    {
+        // A Request must has Content-Type: application/vnd.api+json for POST|PATCH
+        $errors = [];
+        if (in_array($request->getMethod(), ['POST', 'PATCH'])) {
+            if ($request->getContentType() !== 'application/vnd.api+json') {
+                $errors['errors'][]['detail'] = 'Content must be application/vnd.api+json';
+            }
+
+            // Ensure json data always valid
+            if (json_decode($request->getContent()) === null) {
+                $errors['errors'][]['detail'] = 'Request body is not valid an json data';
+            }
+        }
+
+        $acceptableTypes = $request->getAcceptableContentTypes();
+        if (count($acceptableTypes) > 1 || reset($acceptableTypes) !== 'application/vnd.api+json') {
+            $errors['errors'][]['detail'] = 'Accept header must be only application/vnd.api+json';
+        }
+
+        return !empty($errors) ? new JsonResponse($errors, 400) : null;
     }
 
     protected function doGet($url, Request $request)
