@@ -1,0 +1,180 @@
+{
+    "resources": {
+        "account": {
+            "description": "The account resource",
+            "dataStructure": {
+                "fields": {
+                    "uid": {
+                        "description": "The user id",
+                        "dataType": "integer",
+                        "identification": true
+                    },
+                    "username": {
+                        "description": "The field username",
+                        "dataType": "string"
+                    },
+                    "email": {
+                        "description": "The field email",
+                        "dataType": "email"
+                    },
+                    "father": {
+                        "description": "The father user id",
+                        "dataType": "integer",
+                        "reference": "account"
+                    }
+                }
+            },
+            "endpoints": {
+                "login:POST": {
+                    "requireAuthenticate": true,
+                    "group": "Account",
+                    "description": "Description",
+                    "responses": {
+                        "attributes": {
+                            "uid": "123",
+                            "username": "quyenbui",
+                            "email": "quyen@go1.com.au"
+                        }
+                    },
+                    "parameters": {
+                        "note": "Some note",
+                        "data": {
+                            "username": {
+                                "dataType": "string",
+                                "title": "Username",
+                                "description": "User name",
+                                "required": true,
+                                "exampleValue": "username"
+                            },
+                            "password": {
+                                "dataType": "password",
+                                "title": "Password",
+                                "description": "Password",
+                                "required": true
+                            }
+                        }
+                    }
+                },
+                "search:GET": {
+                    "group": "Account",
+                    "description": "Search for the accounts",
+                    "parameters": {
+                        "get": {
+                            "page": "@page",
+                            "filter": "@filter",
+                            "sort": "@sort",
+                            "included": "@included",
+                            "fields": "@fields"
+                        }
+                    },
+                    "responses": [
+                        {
+                            "attributes": {
+                                "uid": "123",
+                                "username": "quyenbui",
+                                "email": "quyen@go1.com.au"
+                            },
+                            "relationships": {
+                                "father": {
+                                    "data": {
+                                        "type": "account",
+                                        "id": 1
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "attributes": {
+                                "uid": "1",
+                                "username": "quyenbui",
+                                "email": "quyen@go1.com.au"
+                            }
+                        }
+                    ]
+                },
+                "{uid}:GET": {
+                    "group": "Account",
+                    "description": "Get account detail",
+                    "parameters": {
+                        "get": {
+                            "included": "@included",
+                            "fields": "@fields"
+                        },
+                        "{uid}": {
+                            "dataType": "integer",
+                            "title": "User Id",
+                            "description": "User Id",
+                            "required": true,
+                            "exampleValue": "10"
+                        }
+                    },
+                    "responses": {
+                        "attributes": {
+                            "uid": "123",
+                            "username": "quyenbui",
+                            "email": "quyen@go1.com.au"
+                        },
+                        "relationships": {
+                            "father": {
+                                "data": {
+                                    "type": "account",
+                                    "id": 1
+                                }
+                            }
+                        }
+                    }
+                },
+                "{uid}:PATCH": {
+                    "group": "Account",
+                    "description": "Update account detail",
+                    "parameters": {
+                        "data": {
+                            "username": {
+                                "dataType": "string",
+                                "title": "Username",
+                                "description": "User name",
+                                "required": true,
+                                "exampleValue": "username"
+                            },
+                            "{uid}": {
+                                "dataType": "integer",
+                                "title": "User Id",
+                                "description": "User Id",
+                                "required": true,
+                                "exampleValue": "10"
+                            }
+                        }
+                    },
+                    "responses": {
+                        "attributes": {
+                            "uid": "123",
+                            "username": "quyenbui",
+                            "email": "quyen@go1.com.au"
+                        },
+                        "relationships": {
+                            "father": {
+                                "data": {
+                                    "type": "account",
+                                    "id": 1
+                                }
+                            }
+                        }
+                    }
+                },
+                "{uid}:DELETE": {
+                    "group": "Account",
+                    "description": "Delete account",
+                    "parameters": {
+                        "{uid}": {
+                            "dataType": "integer",
+                            "title": "User Id",
+                            "description": "User Id",
+                            "required": true,
+                            "exampleValue": "10"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
